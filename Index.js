@@ -14,8 +14,10 @@ function mine() {
     // TODO: mine a block
     // stores id of last block
     const block = { id: blocks.length };
-    // pushes new block
-    blocks.push(block);
+    // hashes block
+    const hash = SHA256(JSON.stringify(block));
+    // pushes block
+    blocks.push({block, hash});
 }
 
 module.exports = {
