@@ -18,7 +18,7 @@ function mine() {
     transactions.push(mempool.pop());
   };
   // stores id of last block
-  const block = { id: blocks.length };
+  const block = { id: blocks.length, transactions };
   // hashes block
   const hash = SHA256(JSON.stringify(block));
   // pushes block
