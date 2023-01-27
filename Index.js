@@ -11,7 +11,7 @@ function addTransaction(transaction) {
   mempool.push(transaction);
 }
 
-function mine() {
+function mine(nonce) {
   // mine tx:
   let transactions = [];
   while (transactions.length < MAX_TRANSACTIONS && mempool.length > 0) {
@@ -19,11 +19,22 @@ function mine() {
   };
   // stores id of last block
   const block = { id: blocks.length, transactions };
-  // hashes block
-  const hash = SHA256(JSON.stringify(block));
-  // pushes block
-  blocks.push({ block, hash });
+  block.nonce = 0;
+  let hash;
+  while (true) {
+      hash = SHA256(JSON.stringify(block)).toString();
+      if (BigInt(`0x${hash}`) < TARGET_DIFFICULTY) {
+          break;
+      }
+      block.nonce++;
+  }
+  blocks.push({ ...block, hash });
 }
+
+// You can compare a BigInt to another BigInt using the JavaScript comparison operators. 
+// You can convert from a hash to be a BigInt by:
+// const hash = SHA256("example");
+// const int = BigInt(`0x${hash}`);
 
 module.exports = {
   TARGET_DIFFICULTY,
